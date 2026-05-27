@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dado e Informação – 3º Ano</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --azul:#1565C0; --azul-l:#E3F2FD; --azul-b:#90CAF9;
+  --verde:#2E7D32; --verde-l:#E8F5E9; --verde-b:#A5D6A7;
+  --verm:#C62828;  --verm-l:#FFEBEE;  --verm-b:#EF9A9A;
+  --amb:#E65100;   --amb-l:#FFF3E0;   --amb-b:#FFCC80;
+  --roxo:#6A1B9A;  --roxo-l:#F3E5F5;
+  --bg:#F0F4FF; --branco:#fff; --borda:#DEE2E6;
+  --texto:#1A1A2E; --sans:'Nunito',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;font-family:var(--sans);}
+body{background:var(--bg);color:var(--texto);display:flex;flex-direction:column;min-height:100vh;overflow-x:hidden;}
+
+/* ── TOP ── */
+.topbar{
+  background:var(--azul);color:#fff;
+  padding:0 24px;height:54px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;position:sticky;top:0;z-index:100;
+}
+.tb-left{display:flex;align-items:center;gap:10px;}
+.badge{background:#FFD600;color:#1A1A2E;font-size:11px;font-weight:900;padding:3px 11px;border-radius:20px;}
+.tb-title{font-size:14px;font-weight:800;}
+.tb-right{font-size:11px;opacity:.8;font-weight:700;}
+
+/* progresso */
+.prog-wrap{height:6px;background:rgba(255,255,255,.25);}
+.prog-fill{height:100%;background:#FFD600;transition:width .4s;width:0%;}
+
+/* ── TELAS ── */
+.telas{flex:1;}
+.tela{display:none;flex-direction:column;align-items:center;justify-content:center;
+  min-height:calc(100vh - 54px - 6px - 54px);padding:24px 16px;}
+.tela.ativa{display:flex;}
+
+/* ── INTRO ── */
+.intro-card{
+  background:var(--branco);border-radius:24px;
+  padding:40px 36px;text-align:center;max-width:480px;width:100%;
+  box-shadow:0 8px 32px rgba(21,101,192,.12);
+  border:2px solid var(--azul-b);
+}
+.intro-banner{
+  background:linear-gradient(135deg,#E3F2FD,#F3E5F5);
+  border-radius:16px;padding:20px;margin-bottom:20px;
+  font-size:64px;letter-spacing:8px;
+}
+.intro-card h1{font-size:24px;font-weight:900;color:var(--azul);margin-bottom:10px;}
+.intro-card p{font-size:14px;color:#555;line-height:1.6;margin-bottom:22px;}
+.intro-pills{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+.pill{border-radius:20px;padding:6px 14px;font-size:13px;font-weight:800;}
+.pill.a{background:var(--azul-l);color:var(--azul);border:1.5px solid var(--azul-b);}
+.pill.v{background:var(--verde-l);color:var(--verde);border:1.5px solid var(--verde-b);}
+.pill.m{background:var(--amb-l);color:var(--amb);border:1.5px solid var(--amb-b);}
+.btn-start{
+  background:var(--azul);color:#fff;border:none;border-radius:14px;
+  padding:16px 48px;font-size:18px;font-weight:900;cursor:pointer;
+  font-family:var(--sans);transition:all .2s;
+}
+.btn-start:hover{background:#0D47A1;transform:translateY(-3px);box-shadow:0 10px 28px rgba(21,101,192,.35);}
+
+/* ── QUESTÃO CARD ── */
+.q-wrap{max-width:680px;width:100%;}
+.q-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:14px;
+}
+.q-num-badge{
+  background:var(--azul);color:#fff;font-size:12px;font-weight:900;
+  padding:5px 14px;border-radius:20px;letter-spacing:.5px;
+}
+.q-pts-badge{
+  background:var(--amb-l);color:var(--amb);border:1.5px solid var(--amb-b);
+  font-size:12px;font-weight:800;padding:5px 14px;border-radius:20px;
+}
+
+/* ── CENÁRIO VISUAL (substitui ctx de texto) ── */
+.cenario{
+  border-radius:16px;padding:18px 20px;
+  margin-bottom:16px;
+  display:flex;align-items:center;gap:16px;
+  flex-wrap:wrap;
+}
+.cenario.amarelo{background:var(--amb-l);border:2px solid var(--amb-b);}
+.cenario.azul   {background:var(--azul-l);border:2px solid var(--azul-b);}
+.cenario.roxo   {background:var(--roxo-l);border:2px solid #CE93D8;}
+.cenario .cn-emoji{font-size:52px;flex-shrink:0;}
+.cenario .cn-texto{font-size:15px;font-weight:800;color:#2c2c2c;line-height:1.5;flex:1;}
+.cenario .cn-texto small{display:block;font-size:13px;font-weight:600;color:#666;margin-top:3px;}
+
+/* ── PERGUNTA ── */
+.q-pergunta{
+  background:var(--branco);border:2px solid var(--borda);
+  border-radius:14px;padding:18px 20px;
+  font-size:17px;font-weight:900;line-height:1.35;
+  color:var(--texto);margin-bottom:16px;
+  text-align:center;
+}
+
+/* ── OPÇÕES IMAGEM GRANDE ── */
+.opts-big{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+}
+.opt-big{
+  background:var(--branco);border:3px solid var(--borda);
+  border-radius:16px;padding:18px 12px;text-align:center;
+  cursor:pointer;font-family:var(--sans);
+  transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:8px;
+}
+.opt-big:hover{border-color:var(--azul);background:var(--azul-l);transform:translateY(-2px);}
+.opt-big .big-e{font-size:52px;line-height:1;}
+.opt-big .big-label{
+  font-size:14px;font-weight:800;color:#333;line-height:1.35;
+}
+.opt-big .big-tag{
+  font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;
+  background:#f0f0f0;color:#555;
+}
+.opt-big.certo{border-color:var(--verde);background:var(--verde-l);}
+.opt-big.certo .big-label{color:var(--verde);}
+.opt-big.certo .big-tag{background:var(--verde-b);color:var(--verde);}
+.opt-big.errado{border-color:var(--verm);background:var(--verm-l);}
+.opt-big.errado .big-label{color:var(--verm);}
+.opt-big.errado .big-tag{background:var(--verm-b);color:var(--verm);}
+.opt-big:disabled{cursor:default;transform:none;}
+
+/* ── FEEDBACK ── */
+.feedback{
+  border-radius:14px;padding:14px 18px;
+  font-size:14px;font-weight:800;line-height:1.6;
+  display:none;margin-top:12px;text-align:center;
+}
+.feedback.ok {background:var(--verde-l);color:var(--verde);border:2px solid var(--verde-b);}
+.feedback.err{background:var(--verm-l); color:var(--verm); border:2px solid var(--verm-b);}
+
+/* ── DOTS ── */
+.dots-row{display:flex;gap:8px;justify-content:center;margin-top:18px;}
+.dot{width:12px;height:12px;border-radius:50%;background:var(--borda);transition:all .2s;}
+.dot.feito {background:var(--verde);}
+.dot.atual {background:var(--azul);transform:scale(1.4);}
+.dot.errado{background:var(--verm);}
+
+/* ── BOTTOM BAR ── */
+.bottom-bar{
+  height:54px;flex-shrink:0;
+  background:var(--branco);border-top:2px solid var(--borda);
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:0 24px;
+}
+.btn-prox{
+  background:var(--azul);color:#fff;border:none;
+  border-radius:12px;padding:11px 32px;
+  font-size:15px;font-weight:900;cursor:pointer;font-family:var(--sans);
+  transition:all .2s;
+}
+.btn-prox:hover{background:#0D47A1;transform:translateY(-1px);}
+.btn-prox:disabled{background:#B0BEC5;cursor:default;transform:none;}
+
+/* ── RESULTADO ── */
+.res-card{
+  background:var(--branco);border-radius:24px;
+  padding:44px 36px;text-align:center;max-width:480px;width:100%;
+  box-shadow:0 8px 32px rgba(0,0,0,.1);border:2px solid var(--borda);
+}
+.res-label{font-size:11px;font-weight:900;color:#888;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.res-nota{font-size:140px;font-weight:900;line-height:1;}
+.res-de10{font-size:22px;color:#888;margin-top:-8px;margin-bottom:12px;}
+.res-stars{font-size:44px;letter-spacing:6px;margin-bottom:12px;}
+.res-msg{font-size:20px;font-weight:900;margin-bottom:6px;}
+.res-sub{font-size:13px;color:#777;max-width:320px;margin:0 auto 22px;line-height:1.6;}
+.res-bubbles{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:24px;}
+.rbubble{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;color:#fff;}
+.btn-retry{
+  background:var(--azul);color:#fff;border:none;border-radius:12px;
+  padding:14px 40px;font-size:16px;font-weight:900;cursor:pointer;font-family:var(--sans);
+  transition:all .2s;
+}
+.btn-retry:hover{background:#0D47A1;transform:translateY(-2px);}
+
+/* ── FOOTER ── */
+footer{
+  background:#263238;color:#90A4AE;
+  text-align:center;padding:14px;
+  font-size:13px;font-weight:700;flex-shrink:0;
+}
+footer strong{color:#ECEFF1;}
+
+@media(max-width:500px){
+  .opts-big{grid-template-columns:1fr 1fr;}
+  .opt-big .big-e{font-size:38px;}
+  .opt-big .big-label{font-size:12px;}
+  .cenario .cn-emoji{font-size:38px;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-left">
+    <span class="badge">3º ANO</span>
+    <span class="tb-title">Dado e Informação</span>
+  </div>
+  <div class="tb-right">EF03CO04</div>
+</div>
+<div class="prog-wrap"><div class="prog-fill" id="prog"></div></div>
+
+<div class="telas" id="telas">
+
+  <!-- TELA 0: INTRO -->
+  <div class="tela ativa" id="t0">
+    <div class="intro-card">
+      <div class="intro-banner">🔢 ➜ 💡</div>
+      <h1>Dado ou Informação?</h1>
+      <p>Observe as imagens e escolha a resposta certa. Cada acerto vale 1 ponto!</p>
+      <div class="intro-pills">
+        <span class="pill a">📋 10 questões</span>
+        <span class="pill v">🏆 Nota 0 a 10</span>
+        <span class="pill m">⚡ Uma por vez</span>
+      </div>
+      <button class="btn-start" onclick="irPara(1)">▶ Vamos lá!</button>
+    </div>
+  </div>
+
+  <!-- telas 1-10 via JS -->
+
+  <!-- TELA 11: RESULTADO -->
+  <div class="tela" id="t11">
+    <div class="res-card">
+      <div class="res-label">Sua nota</div>
+      <div class="res-nota" id="rNota"></div>
+      <div class="res-de10">/ 10</div>
+      <div class="res-stars" id="rStars"></div>
+      <div class="res-msg"   id="rMsg"></div>
+      <div class="res-sub"   id="rSub"></div>
+      <div class="res-bubbles" id="rBubbles"></div>
+      <button class="btn-retry" onclick="reiniciar()">🔄 Tentar novamente</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="bottom-bar">
+  <button class="btn-prox" id="btnProx" onclick="avancar()" disabled>Próxima →</button>
+</div>
+
+<footer>
+  Atividade Educativa &nbsp;|&nbsp; <strong>Profª Adriana Bett Terebinto</strong>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   BANCO: 20 questões totalmente visuais
+   Cada opção tem: emoji grande, label curta, tag ("DADO" ou "INFORMAÇÃO")
+═══════════════════════════════════════════ */
+const BANCO = [
+
+  /* Q1 */
+  { cenario:{emoji:'🔢',txt:'Olhe o número abaixo:',destaque:'"7"',cor:'amarelo'},
+    pergunta:'O que é esse número sozinho?',
+    opts:[
+      {e:'🔢',label:'"7" sozinho',tag:'DADO',c:true},
+      {e:'💡',label:'"7 anos de idade"',tag:'INFORMAÇÃO',c:false},
+      {e:'📅',label:'"7 de setembro"',tag:'INFORMAÇÃO',c:false},
+      {e:'🌡️',label:'"7°C de frio"',tag:'INFORMAÇÃO',c:false},
+    ],
+    exp:'✅ "7" sozinho é um DADO — um número sem contexto. Não sabemos se é idade, dia, temperatura...'},
+
+  /* Q2 */
+  { cenario:{emoji:'📅',txt:'Alguém escreveu no caderno:',destaque:'"14 de julho de 2025"',cor:'azul'},
+    pergunta:'Isso é um dado ou uma informação?',
+    opts:[
+      {e:'🔢',label:'Dados soltos',tag:'SÃO DADOS',c:false},
+      {e:'💡',label:'Data completa',tag:'É INFORMAÇÃO',c:true},
+      {e:'❓',label:'Não sei dizer',tag:'SEM RESPOSTA',c:false},
+      {e:'💻',label:'Código do computador',tag:'É UM CÓDIGO',c:false},
+    ],
+    exp:'✅ Dia + mês + ano juntos formam uma DATA COMPLETA — isso é uma INFORMAÇÃO!'},
+
+  /* Q3 */
+  { cenario:{emoji:'🌡️',txt:'O termômetro mostra:',destaque:'"38"',cor:'amarelo'},
+    pergunta:'Esse número sozinho é...',
+    opts:[
+      {e:'💡',label:'Febre alta!',tag:'INFORMAÇÃO',c:false},
+      {e:'🔢',label:'Só o número 38',tag:'DADO',c:true},
+      {e:'📋',label:'Resultado completo',tag:'INFORMAÇÃO',c:false},
+      {e:'🏥',label:'Diagnóstico médico',tag:'INFORMAÇÃO',c:false},
+    ],
+    exp:'✅ "38" sozinho é um DADO. Sem saber se é temperatura, idade ou pontuação, não diz nada completo!'},
+
+  /* Q4 */
+  { cenario:{emoji:'🌡️👤📍',txt:'Agora o médico escreveu:',destaque:'"38°C – paciente com febre – Chapecó"',cor:'roxo'},
+    pergunta:'Agora o 38 virou o quê?',
+    opts:[
+      {e:'🔢',label:'Continua só um número',tag:'DADO',c:false},
+      {e:'💡',label:'Ficha médica completa',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Código do computador',tag:'CÓDIGO',c:false},
+      {e:'📦',label:'Um pacote de dados',tag:'ARQUIVO',c:false},
+    ],
+    exp:'✅ Com temperatura + situação + cidade, o "38" ganhou contexto e virou uma INFORMAÇÃO!'},
+
+  /* Q5 */
+  { cenario:{emoji:'🖼️',txt:'Uma foto no computador é feita de milhares de:',destaque:'pixels coloridos 🟥🟦🟩',cor:'azul'},
+    pergunta:'Cada pixel com sua cor é um...',
+    opts:[
+      {e:'🔢',label:'Pontinho de cor',tag:'DADO',c:true},
+      {e:'🖼️',label:'A foto inteira',tag:'INFORMAÇÃO',c:false},
+      {e:'💾',label:'O HD do PC',tag:'MEMÓRIA',c:false},
+      {e:'📡',label:'O sinal de Wi-Fi',tag:'REDE',c:false},
+    ],
+    exp:'✅ Cada pixel = 1 COR = 1 DADO. Juntos, milhares de pixels formam a foto = INFORMAÇÃO!'},
+
+  /* Q6 */
+  { cenario:{emoji:'🏠',txt:'Um endereço completo:',destaque:'"Rua das Flores, 24 – Chapecó – SC"',cor:'azul'},
+    pergunta:'Esse endereço é...',
+    opts:[
+      {e:'🔢',label:'Dados soltos',tag:'SÃO DADOS',c:false},
+      {e:'💡',label:'Onde fica o lugar',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Um código secreto',tag:'CÓDIGO',c:false},
+      {e:'❓',label:'Impossível saber',tag:'SEM RESPOSTA',c:false},
+    ],
+    exp:'✅ Rua + número + cidade + estado juntos formam a LOCALIZAÇÃO COMPLETA — uma INFORMAÇÃO!'},
+
+  /* Q7 */
+  { cenario:{emoji:'📊',txt:'A professora escreveu:',destaque:'"28 alunos no 3º ano"',cor:'azul'},
+    pergunta:'Isso é dado ou informação?',
+    opts:[
+      {e:'🔢',label:'Só o número 28',tag:'DADO',c:false},
+      {e:'💡',label:'Quantidade + turma',tag:'INFORMAÇÃO',c:true},
+      {e:'📦',label:'Arquivo do computador',tag:'ARQUIVO',c:false},
+      {e:'🔤',label:'Uma letra do alfabeto',tag:'LETRA',c:false},
+    ],
+    exp:'✅ "28 alunos no 3º ano" une número + contexto — isso é uma INFORMAÇÃO completa!'},
+
+  /* Q8 */
+  { cenario:{emoji:'🎵',txt:'Uma música no computador é guardada como:',destaque:'milhares de números 010110...',cor:'roxo'},
+    pergunta:'Esses números guardados são...',
+    opts:[
+      {e:'🎵',label:'A música completa',tag:'INFORMAÇÃO',c:false},
+      {e:'🔢',label:'Códigos numéricos',tag:'DADOS',c:true},
+      {e:'🔊',label:'O alto-falante',tag:'HARDWARE',c:false},
+      {e:'📡',label:'O sinal do rádio',tag:'REDE',c:false},
+    ],
+    exp:'✅ O computador guarda tudo como DADOS (números). Quando o programa toca, os dados viram a música = INFORMAÇÃO!'},
+
+  /* Q9 */
+  { cenario:{emoji:'👦',txt:'Pedro recebeu uma mensagem:',destaque:'"Aniversário dia 9"',cor:'amarelo'},
+    pergunta:'Pedro tem a informação completa do aniversário?',
+    opts:[
+      {e:'✅',label:'Sim, sabe tudo!',tag:'INFORMAÇÃO COMPLETA',c:false},
+      {e:'❌',label:'Não, falta mês e ano',tag:'SÓ UM DADO',c:true},
+      {e:'🤷',label:'Tanto faz',tag:'SEM DIFERENÇA',c:false},
+      {e:'🎂',label:'Já pode fazer o bolo',tag:'JÁ CHEGA',c:false},
+    ],
+    exp:'✅ "Dia 9" é um DADO. Faltam o mês e o ano para virar uma INFORMAÇÃO de data completa!'},
+
+  /* Q10 */
+  { cenario:{emoji:'🟥🟦🟩🟨',txt:'Veja essas cores isoladas:',destaque:'vermelho · azul · verde · amarelo',cor:'roxo'},
+    pergunta:'Essas cores sozinhas são...',
+    opts:[
+      {e:'🔢',label:'Dados de cor',tag:'DADOS',c:true},
+      {e:'🖼️',label:'Uma imagem completa',tag:'INFORMAÇÃO',c:false},
+      {e:'🎨',label:'Uma pintura pronta',tag:'ARTE',c:false},
+      {e:'💡',label:'Um significado claro',tag:'INFORMAÇÃO',c:false},
+    ],
+    exp:'✅ Cores isoladas são DADOS. Quando organizadas para formar um desenho, viram uma INFORMAÇÃO visual!'},
+
+  /* Q11 */
+  { cenario:{emoji:'📋',txt:'Uma ficha de cadastro:',destaque:'"Ana · 8 anos · Chapecó · 3º ano A"',cor:'azul'},
+    pergunta:'Esses dados juntos formam...',
+    opts:[
+      {e:'🔢',label:'Números separados',tag:'DADOS',c:false},
+      {e:'💡',label:'Ficha completa da aluna',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Programa de computador',tag:'SOFTWARE',c:false},
+      {e:'📦',label:'Arquivo vazio',tag:'PASTA',c:false},
+    ],
+    exp:'✅ Nome + idade + cidade + turma = FICHA COMPLETA. Vários dados juntos formaram uma INFORMAÇÃO!'},
+
+  /* Q12 */
+  { cenario:{emoji:'🛒',txt:'Lista de compras:',destaque:'Arroz · Feijão · Óleo · Sal',cor:'amarelo'},
+    pergunta:'Essa lista é dado ou informação?',
+    opts:[
+      {e:'🔢',label:'Palavras soltas sem sentido',tag:'SÃO DADOS',c:false},
+      {e:'💡',label:'O que precisa comprar',tag:'INFORMAÇÃO',c:true},
+      {e:'📦',label:'Um arquivo de texto',tag:'ARQUIVO',c:false},
+      {e:'❓',label:'Impossível saber',tag:'SEM RESPOSTA',c:false},
+    ],
+    exp:'✅ A lista organizada diz exatamente o que comprar — isso é uma INFORMAÇÃO com significado!'},
+
+  /* Q13 */
+  { cenario:{emoji:'📰',txt:'Uma notícia no jornal:',destaque:'"Chuva de 40mm em Chapecó na quinta"',cor:'azul'},
+    pergunta:'Essa notícia é...',
+    opts:[
+      {e:'🔢',label:'Só o número 40',tag:'DADO',c:false},
+      {e:'💡',label:'Evento + local + dia',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Código do site',tag:'CÓDIGO',c:false},
+      {e:'📡',label:'Sinal de rádio',tag:'REDE',c:false},
+    ],
+    exp:'✅ Chuva + quantidade + cidade + dia = NOTÍCIA COMPLETA. Vários dados formaram uma INFORMAÇÃO!'},
+
+  /* Q14 */
+  { cenario:{emoji:'🔤',txt:'A letra do alfabeto:',destaque:'"M"',cor:'amarelo'},
+    pergunta:'Essa letra sozinha é...',
+    opts:[
+      {e:'🔢',label:'Um símbolo isolado',tag:'DADO',c:true},
+      {e:'💡',label:'Uma palavra completa',tag:'INFORMAÇÃO',c:false},
+      {e:'📖',label:'Um livro inteiro',tag:'INFORMAÇÃO',c:false},
+      {e:'✉️',label:'Uma mensagem completa',tag:'INFORMAÇÃO',c:false},
+    ],
+    exp:'✅ "M" sozinho é um DADO — apenas um símbolo. Com outras letras, forma palavras e transmite uma INFORMAÇÃO!'},
+
+  /* Q15 */
+  { cenario:{emoji:'🔤',txt:'As letras juntas formam:',destaque:'"M · A · R · I · A" = MARIA',cor:'azul'},
+    pergunta:'O nome "MARIA" é...',
+    opts:[
+      {e:'🔢',label:'5 letras separadas',tag:'SÃO DADOS',c:false},
+      {e:'💡',label:'Um nome — identifica alguém',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Código do computador',tag:'CÓDIGO',c:false},
+      {e:'🔤',label:'Só um símbolo',tag:'DADO',c:false},
+    ],
+    exp:'✅ Letras separadas são DADOS. Organizadas, formam um NOME = INFORMAÇÃO que identifica uma pessoa!'},
+
+  /* Q16 */
+  { cenario:{emoji:'🌍',txt:'Os cartões dizem:',destaque:'Chapecó · Santa Catarina · Brasil',cor:'roxo'},
+    pergunta:'Esses cartões juntos formam...',
+    opts:[
+      {e:'🔢',label:'Palavras sem relação',tag:'DADOS SOLTOS',c:false},
+      {e:'💡',label:'Onde fica a cidade',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Um arquivo de texto',tag:'ARQUIVO',c:false},
+      {e:'❓',label:'Não dá para saber',tag:'SEM RESPOSTA',c:false},
+    ],
+    exp:'✅ Cidade + estado + país = LOCALIZAÇÃO COMPLETA no mapa. Dados organizados viraram INFORMAÇÃO!'},
+
+  /* Q17 */
+  { cenario:{emoji:'⚽',txt:'O placar do jogo mostra:',destaque:'"3 × 1"',cor:'amarelo'},
+    pergunta:'Esses dois números sozinhos são...',
+    opts:[
+      {e:'💡',label:'Resultado do jogo',tag:'INFORMAÇÃO',c:false},
+      {e:'🔢',label:'Números sem contexto',tag:'DADOS',c:true},
+      {e:'🏆',label:'O nome do campeão',tag:'INFORMAÇÃO',c:false},
+      {e:'📺',label:'Canal da televisão',tag:'INFORMAÇÃO',c:false},
+    ],
+    exp:'✅ "3 × 1" sozinhos são DADOS. Para virar INFORMAÇÃO precisamos saber: quais times? qual jogo?'},
+
+  /* Q18 */
+  { cenario:{emoji:'⚽📺🗓️',txt:'Agora com contexto:',destaque:'"Brasil 3 × 1 Argentina – 10/07/2025"',cor:'azul'},
+    pergunta:'Agora o placar virou...',
+    opts:[
+      {e:'🔢',label:'Ainda são só números',tag:'DADOS',c:false},
+      {e:'💡',label:'Resultado completo',tag:'INFORMAÇÃO',c:true},
+      {e:'💾',label:'Arquivo guardado',tag:'ARQUIVO',c:false},
+      {e:'❓',label:'Ainda falta algo',tag:'INCOMPLETO',c:false},
+    ],
+    exp:'✅ Times + placar + data = RESULTADO COMPLETO do jogo. Os dados ganharam contexto e viraram INFORMAÇÃO!'},
+
+  /* Q19 */
+  { cenario:{emoji:'🎒',txt:'Na mochila do João tem:',destaque:'Caderno · Lápis · Borracha · Régua',cor:'amarelo'},
+    pergunta:'Esses itens listados formam...',
+    opts:[
+      {e:'🔢',label:'Palavras sem sentido',tag:'DADOS SOLTOS',c:false},
+      {e:'💡',label:'O que tem na mochila',tag:'INFORMAÇÃO',c:true},
+      {e:'💻',label:'Código de computador',tag:'CÓDIGO',c:false},
+      {e:'📦',label:'Uma caixa vazia',tag:'NADA',c:false},
+    ],
+    exp:'✅ A lista organizada diz tudo que está na mochila — é uma INFORMAÇÃO completa e útil!'},
+
+  /* Q20 */
+  { cenario:{emoji:'💻',txt:'O computador guarda o nome "Ana" como:',destaque:'065 110 097 (números secretos)',cor:'roxo'},
+    pergunta:'Esses números são o quê?',
+    opts:[
+      {e:'💡',label:'O nome "Ana" já pronto',tag:'INFORMAÇÃO',c:false},
+      {e:'🔢',label:'Códigos — dados que o PC entende',tag:'DADOS',c:true},
+      {e:'🔊',label:'Um som do computador',tag:'ÁUDIO',c:false},
+      {e:'🖼️',label:'Uma foto da Ana',tag:'IMAGEM',c:false},
+    ],
+    exp:'✅ O PC guarda tudo como DADOS (números). Quando exibe na tela, você vê a INFORMAÇÃO: o nome "Ana"!'},
+];
+
+/* ═══════════════════════════════════════════
+   ENGINE
+═══════════════════════════════════════════ */
+function shuffle(a){const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;}
+
+let questoes=[],atual=0,respostas=[];
+
+function sortear(){
+  questoes=shuffle(BANCO).slice(0,10).map(q=>({...q,opts:shuffle(q.opts.map(o=>({...o})))}));
+  respostas=new Array(10).fill(null);
+}
+
+const COR_CENARIO={amarelo:'amarelo',azul:'azul',roxo:'roxo'};
+
+function buildTelas(){
+  const wrap=document.getElementById('telas');
+  const tRes=document.getElementById('t11');
+  questoes.forEach((q,i)=>{
+    const n=i+1;
+    const div=document.createElement('div');
+    div.className='tela';div.id='t'+n;
+    div.innerHTML=`
+      <div class="q-wrap">
+        <div class="q-header">
+          <span class="q-num-badge">Questão ${n} de 10</span>
+          <span class="q-pts-badge">1 ponto</span>
+        </div>
+        <div class="cenario ${q.cenario.cor||'amarelo'}">
+          <span class="cn-emoji">${q.cenario.emoji}</span>
+          <span class="cn-texto">${q.cenario.txt}<small>${q.cenario.destaque}</small></span>
+        </div>
+        <div class="q-pergunta">${q.pergunta}</div>
+        <div class="opts-big" id="o${n}">
+          ${q.opts.map((op,j)=>`
+            <button class="opt-big" onclick="responder(${n},${j})" id="o${n}_${j}">
+              <span class="big-e">${op.e}</span>
+              <span class="big-label">${op.label}</span>
+              <span class="big-tag">${op.tag}</span>
+            </button>`).join('')}
+        </div>
+        <div class="feedback" id="fb${n}"></div>
+        <div class="dots-row" id="dots${n}"></div>
+      </div>`;
+    wrap.insertBefore(div,tRes);
+  });
+}
+
+function atualizarDots(telaAtual){
+  for(let i=1;i<=10;i++){
+    const w=document.getElementById('dots'+i);
+    if(!w)continue;
+    w.innerHTML=respostas.map((r,j)=>{
+      let cls='dot';
+      if(r!==null)cls+=questoes[j].opts[r].c?' feito':' errado';
+      else if(j+1===telaAtual)cls+=' atual';
+      return`<div class="${cls}"></div>`;
+    }).join('');
+  }
+}
+
+function irPara(n){
+  document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
+  document.getElementById('t'+n).classList.add('ativa');
+  atual=n;
+  const pct=n===0?0:n>10?100:(n-1)/10*100;
+  document.getElementById('prog').style.width=pct+'%';
+  const btn=document.getElementById('btnProx');
+  if(n===0){btn.textContent='Próxima →';btn.disabled=true;}
+  else if(n<=10){
+    btn.textContent=n<10?'Próxima →':'Ver Nota →';
+    btn.disabled=respostas[n-1]===null;
+  }else{btn.disabled=true;}
+  if(n>=1&&n<=10)atualizarDots(n);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function responder(n,escolha){
+  if(respostas[n-1]!==null)return;
+  respostas[n-1]=escolha;
+  const q=questoes[n-1];
+  const ok=q.opts[escolha].c;
+  document.querySelectorAll(`#o${n} .opt-big`).forEach(b=>b.disabled=true);
+  document.getElementById(`o${n}_${escolha}`).classList.add(ok?'certo':'errado');
+  if(!ok){const ci=q.opts.findIndex(o=>o.c);if(ci>=0)document.getElementById(`o${n}_${ci}`).classList.add('certo');}
+  const fb=document.getElementById('fb'+n);
+  fb.className='feedback '+(ok?'ok':'err');
+  fb.innerHTML=q.exp;
+  fb.style.display='block';
+  document.getElementById('btnProx').disabled=false;
+  atualizarDots(n);
+}
+
+function avancar(){
+  if(atual===0){irPara(1);return;}
+  if(atual<10){irPara(atual+1);return;}
+  mostrarResultado();
+}
+
+function mostrarResultado(){
+  const ac=respostas.filter((r,i)=>r!==null&&questoes[i].opts[r].c).length;
+  const cor=ac>=7?'#2E7D32':ac>=5?'#E65100':'#C62828';
+  const stars=ac===10?'⭐⭐⭐':ac>=7?'⭐⭐':ac>=5?'⭐':'';
+  const msg=ac===10?'🏆 Nota máxima! Incrível!':ac>=9?'🌟 Excelente!':ac>=7?'🎉 Muito bem!':ac>=5?'💪 Aprovado! Continue!':'📚 Revise e tente de novo!';
+  document.getElementById('rNota').textContent=ac;
+  document.getElementById('rNota').style.color=cor;
+  document.getElementById('rStars').textContent=stars;
+  document.getElementById('rMsg').textContent=msg;
+  document.getElementById('rSub').textContent='Cada questão valeu 1 ponto. As questões são diferentes a cada tentativa!';
+  document.getElementById('rBubbles').innerHTML=respostas.map((r,i)=>{
+    const ok=r!==null&&questoes[i].opts[r].c;
+    return`<div class="rbubble" style="background:${ok?'#2E7D32':'#C62828'};">${i+1}</div>`;
+  }).join('');
+  irPara(11);
+  document.getElementById('prog').style.width='100%';
+}
+
+function reiniciar(){
+  for(let i=1;i<=10;i++){const t=document.getElementById('t'+i);if(t)t.remove();}
+  sortear();buildTelas();irPara(0);
+  document.getElementById('btnProx').disabled=true;
+  document.getElementById('btnProx').textContent='Próxima →';
+}
+
+sortear();buildTelas();irPara(0);
+document.getElementById('btnProx').disabled=true;
+</script>
+</body>
+</html>
