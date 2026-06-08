@@ -82,7 +82,7 @@ body{background:var(--bg);color:var(--texto);display:flex;flex-direction:column;
   font-size:12px;font-weight:800;padding:5px 14px;border-radius:20px;
 }
 
-/* ── CENÁRIO VISUAL (substitui ctx de texto) ── */
+/* ── CENÁRIO VISUAL ── */
 .cenario{
   border-radius:16px;padding:18px 20px;
   margin-bottom:16px;
@@ -105,7 +105,7 @@ body{background:var(--bg);color:var(--texto);display:flex;flex-direction:column;
   text-align:center;
 }
 
-/* ── OPÇÕES IMAGEM GRANDE ── */
+/* ── OPÇÕES ── */
 .opts-big{
   display:grid;grid-template-columns:1fr 1fr;gap:12px;
 }
@@ -219,7 +219,7 @@ footer strong{color:#ECEFF1;}
     <div class="intro-card">
       <div class="intro-banner">🔢 ➜ 💡</div>
       <h1>Dado ou Informação?</h1>
-      <p>Observe as imagens e escolha a resposta certa. Cada acerto vale 1 ponto!</p>
+      <p>Dado é uma informação incompleta. Quando os dados são organizados e fazem sentido, eles formam uma informação. Leia cada exemplo e escolha a resposta certa!</p>
       <div class="intro-pills">
         <span class="pill a">📋 10 questões</span>
         <span class="pill v">🏆 Nota 0 a 10</span>
@@ -257,8 +257,8 @@ footer strong{color:#ECEFF1;}
 
 <script>
 /* ═══════════════════════════════════════════
-   BANCO: 20 questões totalmente visuais
-   Cada opção tem: emoji grande, label curta, tag ("DADO" ou "INFORMAÇÃO")
+   BANCO: 20 questões com vocabulário e exemplos
+   adequados para alunos do 3º ano (8-9 anos)
 ═══════════════════════════════════════════ */
 const BANCO = [
 
@@ -269,20 +269,20 @@ const BANCO = [
       {e:'🔢',label:'"7" sozinho',tag:'DADO',c:true},
       {e:'💡',label:'"7 anos de idade"',tag:'INFORMAÇÃO',c:false},
       {e:'📅',label:'"7 de setembro"',tag:'INFORMAÇÃO',c:false},
-      {e:'🌡️',label:'"7°C de frio"',tag:'INFORMAÇÃO',c:false},
+      {e:'🌡️',label:'"7 graus de frio"',tag:'INFORMAÇÃO',c:false},
     ],
-    exp:'✅ "7" sozinho é um DADO — um número sem contexto. Não sabemos se é idade, dia, temperatura...'},
+    exp:'✅ O número 7 sozinho é um dado. Ele não explica nada por si só.'},
 
   /* Q2 */
   { cenario:{emoji:'📅',txt:'Alguém escreveu no caderno:',destaque:'"14 de julho de 2025"',cor:'azul'},
     pergunta:'Isso é um dado ou uma informação?',
     opts:[
-      {e:'🔢',label:'Dados soltos',tag:'SÃO DADOS',c:false},
+      {e:'🔢',label:'Números separados',tag:'SÃO DADOS',c:false},
       {e:'💡',label:'Data completa',tag:'É INFORMAÇÃO',c:true},
       {e:'❓',label:'Não sei dizer',tag:'SEM RESPOSTA',c:false},
-      {e:'💻',label:'Código do computador',tag:'É UM CÓDIGO',c:false},
+      {e:'🔤',label:'Só letras e números',tag:'SÃO DADOS',c:false},
     ],
-    exp:'✅ Dia + mês + ano juntos formam uma DATA COMPLETA — isso é uma INFORMAÇÃO!'},
+    exp:'✅ Dia, mês e ano juntos formam uma data completa. Isso é uma informação!'},
 
   /* Q3 */
   { cenario:{emoji:'🌡️',txt:'O termômetro mostra:',destaque:'"38"',cor:'amarelo'},
@@ -291,196 +291,196 @@ const BANCO = [
       {e:'💡',label:'Febre alta!',tag:'INFORMAÇÃO',c:false},
       {e:'🔢',label:'Só o número 38',tag:'DADO',c:true},
       {e:'📋',label:'Resultado completo',tag:'INFORMAÇÃO',c:false},
-      {e:'🏥',label:'Diagnóstico médico',tag:'INFORMAÇÃO',c:false},
+      {e:'🏥',label:'O que a criança tem',tag:'INFORMAÇÃO',c:false},
     ],
-    exp:'✅ "38" sozinho é um DADO. Sem saber se é temperatura, idade ou pontuação, não diz nada completo!'},
+    exp:'✅ O número 38 sozinho é um dado. Sem saber o que mede, não diz nada completo.'},
 
   /* Q4 */
-  { cenario:{emoji:'🌡️👤📍',txt:'Agora o médico escreveu:',destaque:'"38°C – paciente com febre – Chapecó"',cor:'roxo'},
+  { cenario:{emoji:'🌡️👤📍',txt:'A enfermeira anotou:',destaque:'"38°C – criança com febre – Chapecó"',cor:'roxo'},
     pergunta:'Agora o 38 virou o quê?',
     opts:[
       {e:'🔢',label:'Continua só um número',tag:'DADO',c:false},
-      {e:'💡',label:'Ficha médica completa',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Código do computador',tag:'CÓDIGO',c:false},
-      {e:'📦',label:'Um pacote de dados',tag:'ARQUIVO',c:false},
+      {e:'💡',label:'Temperatura + situação + cidade',tag:'INFORMAÇÃO',c:true},
+      {e:'🔤',label:'Uma palavra qualquer',tag:'DADO',c:false},
+      {e:'❓',label:'Ainda não diz nada',tag:'DADO',c:false},
     ],
-    exp:'✅ Com temperatura + situação + cidade, o "38" ganhou contexto e virou uma INFORMAÇÃO!'},
+    exp:'✅ Com temperatura, situação e cidade, o 38 ganhou sentido e virou uma informação!'},
 
   /* Q5 */
-  { cenario:{emoji:'🖼️',txt:'Uma foto no computador é feita de milhares de:',destaque:'pixels coloridos 🟥🟦🟩',cor:'azul'},
-    pergunta:'Cada pixel com sua cor é um...',
+  { cenario:{emoji:'🎒',txt:'Na mochila da Luana tem:',destaque:'Caderno · Lápis · Borracha · Régua',cor:'amarelo'},
+    pergunta:'Esses itens listados formam...',
     opts:[
-      {e:'🔢',label:'Pontinho de cor',tag:'DADO',c:true},
-      {e:'🖼️',label:'A foto inteira',tag:'INFORMAÇÃO',c:false},
-      {e:'💾',label:'O HD do PC',tag:'MEMÓRIA',c:false},
-      {e:'📡',label:'O sinal de Wi-Fi',tag:'REDE',c:false},
+      {e:'🔢',label:'Palavras sem sentido',tag:'SÃO DADOS',c:false},
+      {e:'💡',label:'O que tem na mochila',tag:'INFORMAÇÃO',c:true},
+      {e:'🔤',label:'Letras separadas',tag:'SÃO DADOS',c:false},
+      {e:'❓',label:'Impossível saber',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ Cada pixel = 1 COR = 1 DADO. Juntos, milhares de pixels formam a foto = INFORMAÇÃO!'},
+    exp:'✅ A lista organizada diz tudo o que está na mochila. Dados juntos formaram uma informação!'},
 
   /* Q6 */
   { cenario:{emoji:'🏠',txt:'Um endereço completo:',destaque:'"Rua das Flores, 24 – Chapecó – SC"',cor:'azul'},
     pergunta:'Esse endereço é...',
     opts:[
-      {e:'🔢',label:'Dados soltos',tag:'SÃO DADOS',c:false},
+      {e:'🔢',label:'Palavras soltas',tag:'SÃO DADOS',c:false},
       {e:'💡',label:'Onde fica o lugar',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Um código secreto',tag:'CÓDIGO',c:false},
+      {e:'🔤',label:'Só um nome de rua',tag:'DADO',c:false},
       {e:'❓',label:'Impossível saber',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ Rua + número + cidade + estado juntos formam a LOCALIZAÇÃO COMPLETA — uma INFORMAÇÃO!'},
+    exp:'✅ Rua, número, cidade e estado juntos formam a localização completa. Isso é uma informação!'},
 
   /* Q7 */
-  { cenario:{emoji:'📊',txt:'A professora escreveu:',destaque:'"28 alunos no 3º ano"',cor:'azul'},
+  { cenario:{emoji:'📊',txt:'A professora escreveu:',destaque:'"28 alunos no 3º ano B"',cor:'azul'},
     pergunta:'Isso é dado ou informação?',
     opts:[
       {e:'🔢',label:'Só o número 28',tag:'DADO',c:false},
-      {e:'💡',label:'Quantidade + turma',tag:'INFORMAÇÃO',c:true},
-      {e:'📦',label:'Arquivo do computador',tag:'ARQUIVO',c:false},
-      {e:'🔤',label:'Uma letra do alfabeto',tag:'LETRA',c:false},
+      {e:'💡',label:'Quantidade e turma juntas',tag:'INFORMAÇÃO',c:true},
+      {e:'🔤',label:'Nome de uma aluna',tag:'DADO',c:false},
+      {e:'❓',label:'Não dá para saber',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ "28 alunos no 3º ano" une número + contexto — isso é uma INFORMAÇÃO completa!'},
+    exp:'✅ Número e turma juntos explicam algo. Isso é uma informação completa!'},
 
   /* Q8 */
-  { cenario:{emoji:'🎵',txt:'Uma música no computador é guardada como:',destaque:'milhares de números 010110...',cor:'roxo'},
-    pergunta:'Esses números guardados são...',
-    opts:[
-      {e:'🎵',label:'A música completa',tag:'INFORMAÇÃO',c:false},
-      {e:'🔢',label:'Códigos numéricos',tag:'DADOS',c:true},
-      {e:'🔊',label:'O alto-falante',tag:'HARDWARE',c:false},
-      {e:'📡',label:'O sinal do rádio',tag:'REDE',c:false},
-    ],
-    exp:'✅ O computador guarda tudo como DADOS (números). Quando o programa toca, os dados viram a música = INFORMAÇÃO!'},
-
-  /* Q9 */
   { cenario:{emoji:'👦',txt:'Pedro recebeu uma mensagem:',destaque:'"Aniversário dia 9"',cor:'amarelo'},
-    pergunta:'Pedro tem a informação completa do aniversário?',
+    pergunta:'Pedro tem a informação completa?',
     opts:[
       {e:'✅',label:'Sim, sabe tudo!',tag:'INFORMAÇÃO COMPLETA',c:false},
       {e:'❌',label:'Não, falta mês e ano',tag:'SÓ UM DADO',c:true},
       {e:'🤷',label:'Tanto faz',tag:'SEM DIFERENÇA',c:false},
       {e:'🎂',label:'Já pode fazer o bolo',tag:'JÁ CHEGA',c:false},
     ],
-    exp:'✅ "Dia 9" é um DADO. Faltam o mês e o ano para virar uma INFORMAÇÃO de data completa!'},
+    exp:'✅ "Dia 9" é um dado. Faltam o mês e o ano para ser uma informação completa.'},
 
-  /* Q10 */
+  /* Q9 */
   { cenario:{emoji:'🟥🟦🟩🟨',txt:'Veja essas cores isoladas:',destaque:'vermelho · azul · verde · amarelo',cor:'roxo'},
     pergunta:'Essas cores sozinhas são...',
     opts:[
-      {e:'🔢',label:'Dados de cor',tag:'DADOS',c:true},
-      {e:'🖼️',label:'Uma imagem completa',tag:'INFORMAÇÃO',c:false},
-      {e:'🎨',label:'Uma pintura pronta',tag:'ARTE',c:false},
+      {e:'🔢',label:'Cores sem contexto',tag:'DADOS',c:true},
+      {e:'🖼️',label:'Um desenho completo',tag:'INFORMAÇÃO',c:false},
+      {e:'🎨',label:'Uma pintura pronta',tag:'INFORMAÇÃO',c:false},
       {e:'💡',label:'Um significado claro',tag:'INFORMAÇÃO',c:false},
     ],
-    exp:'✅ Cores isoladas são DADOS. Quando organizadas para formar um desenho, viram uma INFORMAÇÃO visual!'},
+    exp:'✅ Cores isoladas são dados. Quando organizadas para formar um desenho, viram uma informação!'},
 
-  /* Q11 */
+  /* Q10 */
   { cenario:{emoji:'📋',txt:'Uma ficha de cadastro:',destaque:'"Ana · 8 anos · Chapecó · 3º ano A"',cor:'azul'},
     pergunta:'Esses dados juntos formam...',
     opts:[
       {e:'🔢',label:'Números separados',tag:'DADOS',c:false},
       {e:'💡',label:'Ficha completa da aluna',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Programa de computador',tag:'SOFTWARE',c:false},
-      {e:'📦',label:'Arquivo vazio',tag:'PASTA',c:false},
+      {e:'🔤',label:'Só um nome',tag:'DADO',c:false},
+      {e:'❓',label:'Nada ainda',tag:'DADOS',c:false},
     ],
-    exp:'✅ Nome + idade + cidade + turma = FICHA COMPLETA. Vários dados juntos formaram uma INFORMAÇÃO!'},
+    exp:'✅ Nome, idade, cidade e turma juntos formam a ficha completa da aluna. Isso é uma informação!'},
 
-  /* Q12 */
+  /* Q11 */
   { cenario:{emoji:'🛒',txt:'Lista de compras:',destaque:'Arroz · Feijão · Óleo · Sal',cor:'amarelo'},
-    pergunta:'Essa lista é dado ou informação?',
+    pergunta:'Temos um dado ou uma informação?',
     opts:[
-      {e:'🔢',label:'Palavras soltas sem sentido',tag:'SÃO DADOS',c:false},
+      {e:'🔢',label:'Palavras soltas',tag:'SÃO DADOS',c:false},
       {e:'💡',label:'O que precisa comprar',tag:'INFORMAÇÃO',c:true},
-      {e:'📦',label:'Um arquivo de texto',tag:'ARQUIVO',c:false},
+      {e:'🔤',label:'Letras misturadas',tag:'SÃO DADOS',c:false},
       {e:'❓',label:'Impossível saber',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ A lista organizada diz exatamente o que comprar — isso é uma INFORMAÇÃO com significado!'},
+    exp:'✅ A lista organizada diz exatamente o que comprar. Dados organizados formam uma informação!'},
+
+  /* Q12 */
+  { cenario:{emoji:'📰',txt:'Alguém anotou no calendário:',destaque:'"Chuva forte em Chapecó na quinta-feira"',cor:'azul'},
+    pergunta:'O exemplo acima representa:',
+    opts:[
+      {e:'🔢',label:'Só a palavra "chuva"',tag:'DADO',c:false},
+      {e:'💡',label:'O que aconteceu, onde e quando',tag:'INFORMAÇÃO',c:true},
+      {e:'🔤',label:'Apenas um dia da semana',tag:'DADO',c:false},
+      {e:'❓',label:'Não dá para saber',tag:'SEM RESPOSTA',c:false},
+    ],
+    exp:'✅ Chuva, cidade e dia juntos explicam o que aconteceu. Isso é uma informação!'},
 
   /* Q13 */
-  { cenario:{emoji:'📰',txt:'Uma notícia no jornal:',destaque:'"Chuva de 40mm em Chapecó na quinta"',cor:'azul'},
-    pergunta:'Essa notícia é...',
-    opts:[
-      {e:'🔢',label:'Só o número 40',tag:'DADO',c:false},
-      {e:'💡',label:'Evento + local + dia',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Código do site',tag:'CÓDIGO',c:false},
-      {e:'📡',label:'Sinal de rádio',tag:'REDE',c:false},
-    ],
-    exp:'✅ Chuva + quantidade + cidade + dia = NOTÍCIA COMPLETA. Vários dados formaram uma INFORMAÇÃO!'},
-
-  /* Q14 */
   { cenario:{emoji:'🔤',txt:'A letra do alfabeto:',destaque:'"M"',cor:'amarelo'},
     pergunta:'Essa letra sozinha é...',
     opts:[
       {e:'🔢',label:'Um símbolo isolado',tag:'DADO',c:true},
       {e:'💡',label:'Uma palavra completa',tag:'INFORMAÇÃO',c:false},
-      {e:'📖',label:'Um livro inteiro',tag:'INFORMAÇÃO',c:false},
+      {e:'📖',label:'Um nome de aluno',tag:'INFORMAÇÃO',c:false},
       {e:'✉️',label:'Uma mensagem completa',tag:'INFORMAÇÃO',c:false},
     ],
-    exp:'✅ "M" sozinho é um DADO — apenas um símbolo. Com outras letras, forma palavras e transmite uma INFORMAÇÃO!'},
+    exp:'✅ A letra M sozinha é um dado. Com outras letras, ela forma palavras e transmite uma informação!'},
 
-  /* Q15 */
+  /* Q14 */
   { cenario:{emoji:'🔤',txt:'As letras juntas formam:',destaque:'"M · A · R · I · A" = MARIA',cor:'azul'},
-    pergunta:'O nome "MARIA" é...',
+    pergunta:'"MARIA" é dado ou informação?',
     opts:[
       {e:'🔢',label:'5 letras separadas',tag:'SÃO DADOS',c:false},
       {e:'💡',label:'Um nome — identifica alguém',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Código do computador',tag:'CÓDIGO',c:false},
       {e:'🔤',label:'Só um símbolo',tag:'DADO',c:false},
+      {e:'❓',label:'Não sei dizer',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ Letras separadas são DADOS. Organizadas, formam um NOME = INFORMAÇÃO que identifica uma pessoa!'},
+    exp:'✅ Letras separadas são dados. Organizadas, formam um nome — isso é uma informação!'},
 
-  /* Q16 */
+  /* Q15 */
   { cenario:{emoji:'🌍',txt:'Os cartões dizem:',destaque:'Chapecó · Santa Catarina · Brasil',cor:'roxo'},
     pergunta:'Esses cartões juntos formam...',
     opts:[
       {e:'🔢',label:'Palavras sem relação',tag:'DADOS SOLTOS',c:false},
       {e:'💡',label:'Onde fica a cidade',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Um arquivo de texto',tag:'ARQUIVO',c:false},
+      {e:'🔤',label:'Só nomes de lugares',tag:'DADOS',c:false},
       {e:'❓',label:'Não dá para saber',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ Cidade + estado + país = LOCALIZAÇÃO COMPLETA no mapa. Dados organizados viraram INFORMAÇÃO!'},
+    exp:'✅ Cidade, estado e país juntos mostram onde fica o lugar. Dados organizados viram informação!'},
 
-  /* Q17 */
+  /* Q16 */
   { cenario:{emoji:'⚽',txt:'O placar do jogo mostra:',destaque:'"3 × 1"',cor:'amarelo'},
     pergunta:'Esses dois números sozinhos são...',
     opts:[
       {e:'💡',label:'Resultado do jogo',tag:'INFORMAÇÃO',c:false},
-      {e:'🔢',label:'Números sem contexto',tag:'DADOS',c:true},
+      {e:'🔢',label:'Números sem explicação',tag:'DADOS',c:true},
       {e:'🏆',label:'O nome do campeão',tag:'INFORMAÇÃO',c:false},
-      {e:'📺',label:'Canal da televisão',tag:'INFORMAÇÃO',c:false},
+      {e:'📺',label:'O canal da televisão',tag:'INFORMAÇÃO',c:false},
     ],
-    exp:'✅ "3 × 1" sozinhos são DADOS. Para virar INFORMAÇÃO precisamos saber: quais times? qual jogo?'},
+    exp:'✅ "3 × 1" sozinhos são dados. Para virar informação, precisamos saber quais times jogaram.'},
 
-  /* Q18 */
-  { cenario:{emoji:'⚽📺🗓️',txt:'Agora com contexto:',destaque:'"Brasil 3 × 1 Argentina – 10/07/2025"',cor:'azul'},
+  /* Q17 */
+  { cenario:{emoji:'⚽📺🗓️',txt:'Agora com mais detalhes:',destaque:'"Brasil 3 × 1 Argentina – 10/07/2025"',cor:'azul'},
     pergunta:'Agora o placar virou...',
     opts:[
       {e:'🔢',label:'Ainda são só números',tag:'DADOS',c:false},
       {e:'💡',label:'Resultado completo',tag:'INFORMAÇÃO',c:true},
-      {e:'💾',label:'Arquivo guardado',tag:'ARQUIVO',c:false},
+      {e:'🔤',label:'Só nomes de países',tag:'DADOS',c:false},
       {e:'❓',label:'Ainda falta algo',tag:'INCOMPLETO',c:false},
     ],
-    exp:'✅ Times + placar + data = RESULTADO COMPLETO do jogo. Os dados ganharam contexto e viraram INFORMAÇÃO!'},
+    exp:'✅ Times, placar e data juntos formam o resultado completo do jogo. Isso é uma informação!'},
+
+  /* Q18 */
+  { cenario:{emoji:'🖍️',txt:'Veja a cor isolada:',destaque:'"azul"',cor:'roxo'},
+    pergunta:'A palavra "azul" sozinha é...',
+    opts:[
+      {e:'💡',label:'A cor do uniforme da escola',tag:'INFORMAÇÃO',c:false},
+      {e:'🔢',label:'Uma palavra sem contexto',tag:'DADO',c:true},
+      {e:'🎨',label:'Uma pintura pronta',tag:'INFORMAÇÃO',c:false},
+      {e:'📖',label:'Um texto completo',tag:'INFORMAÇÃO',c:false},
+    ],
+    exp:'✅ "Azul" sozinho é um dado. Não sabemos ainda o que é azul ou para que serve essa cor.'},
 
   /* Q19 */
-  { cenario:{emoji:'🎒',txt:'Na mochila do João tem:',destaque:'Caderno · Lápis · Borracha · Régua',cor:'amarelo'},
-    pergunta:'Esses itens listados formam...',
+  { cenario:{emoji:'🖍️👕',txt:'Agora com sentido:',destaque:'"O uniforme da escola é azul e branco"',cor:'azul'},
+    pergunta:'O exemplo acima representa:',
     opts:[
-      {e:'🔢',label:'Palavras sem sentido',tag:'DADOS SOLTOS',c:false},
-      {e:'💡',label:'O que tem na mochila',tag:'INFORMAÇÃO',c:true},
-      {e:'💻',label:'Código de computador',tag:'CÓDIGO',c:false},
-      {e:'📦',label:'Uma caixa vazia',tag:'NADA',c:false},
+      {e:'🔢',label:'Só as palavras "azul" e "branco"',tag:'DADOS',c:false},
+      {e:'💡',label:'Como é o uniforme da escola',tag:'INFORMAÇÃO',c:true},
+      {e:'🔤',label:'Letras soltas',tag:'DADOS',c:false},
+      {e:'❓',label:'Não dá para saber',tag:'SEM RESPOSTA',c:false},
     ],
-    exp:'✅ A lista organizada diz tudo que está na mochila — é uma INFORMAÇÃO completa e útil!'},
+    exp:'✅ Objeto, cores e lugar juntos explicam algo. Isso é uma informação completa!'},
 
   /* Q20 */
-  { cenario:{emoji:'💻',txt:'O computador guarda o nome "Ana" como:',destaque:'065 110 097 (números secretos)',cor:'roxo'},
-    pergunta:'Esses números são o quê?',
+  { cenario:{emoji:'🗓️',txt:'A professora anotou no caderno:',destaque:'"Passeio ao parque: 22 de agosto, 8h, 3º ano B"',cor:'roxo'},
+    pergunta:'Essa anotação é...',
     opts:[
-      {e:'💡',label:'O nome "Ana" já pronto',tag:'INFORMAÇÃO',c:false},
-      {e:'🔢',label:'Códigos — dados que o PC entende',tag:'DADOS',c:true},
-      {e:'🔊',label:'Um som do computador',tag:'ÁUDIO',c:false},
-      {e:'🖼️',label:'Uma foto da Ana',tag:'IMAGEM',c:false},
+      {e:'🔢',label:'Só uma data',tag:'DADO',c:false},
+      {e:'💡',label:'Evento, dia, hora e turma',tag:'INFORMAÇÃO',c:true},
+      {e:'🔤',label:'Só o nome do parque',tag:'DADO',c:false},
+      {e:'❓',label:'Ainda falta algo',tag:'DADO',c:false},
     ],
-    exp:'✅ O PC guarda tudo como DADOS (números). Quando exibe na tela, você vê a INFORMAÇÃO: o nome "Ana"!'},
+    exp:'✅ Evento, data, hora e turma juntos formam uma informação completa sobre o passeio!'},
 ];
 
 /* ═══════════════════════════════════════════
